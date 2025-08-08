@@ -13,27 +13,75 @@
   
   body {
     font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+    background: transparent;
+    margin: 0;
+    padding: 0;
   }
 
-  .container {
+  /* 浮動聊天按鈕 */
+  .chat-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: white;
+    border: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    animation: pulse 2s infinite;
+  }
+
+  .chat-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+  }
+
+  .chat-button.active {
+    transform: rotate(45deg);
+    background: linear-gradient(135deg, #f56565, #e53e3e);
+  }
+
+  @keyframes pulse {
+    0% { box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3); }
+    50% { box-shadow: 0 8px 32px rgba(102, 126, 234, 0.6); }
+    100% { box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3); }
+  }
+
+  /* 聊天窗口 */
+  .chat-container {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 380px;
+    max-height: 500px;
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    width: 100%;
-    max-width: 450px;
-    border-radius: 24px;
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 8px 32px rgba(0,0,0,0.1);
-    padding: 40px 35px;
-    position: relative;
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 999;
     overflow: hidden;
   }
 
-  .container::before {
+  .chat-container.show {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .chat-container::before {
     content: '';
     position: absolute;
     top: 0;
@@ -51,35 +99,34 @@
     100% { background-position: 0% 50%; }
   }
 
+  .chat-header {
+    padding: 20px 24px 16px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
+
   .avatar {
-    width: 80px;
-    height: 80px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     background: linear-gradient(135deg, #667eea, #764ba2);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 24px;
-    font-size: 36px;
-    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
-    animation: float 3s ease-in-out infinite;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-6px); }
+    margin: 0 auto 12px;
+    font-size: 24px;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
   }
 
   .greeting {
-    text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 0;
   }
 
   .greeting h1 {
-    font-size: 28px;
+    font-size: 20px;
     font-weight: 700;
     color: #2d3748;
-    margin-bottom: 12px;
+    margin-bottom: 6px;
     background: linear-gradient(135deg, #667eea, #764ba2);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -87,39 +134,32 @@
   }
 
   .greeting p {
-    font-size: 16px;
+    font-size: 13px;
     color: #4a5568;
-    line-height: 1.6;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards 0.3s;
+    line-height: 1.4;
   }
 
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .chat-content {
+    padding: 20px 24px 24px;
+    max-height: 320px;
+    overflow-y: auto;
   }
 
   .menu {
     display: grid;
-    gap: 12px;
+    gap: 8px;
   }
 
   .menu-item {
     display: block;
     width: 100%;
-    padding: 18px 24px;
+    padding: 12px 16px;
     border: none;
     background: #ffffff;
     color: #2d3748;
-    border-radius: 16px;
+    border-radius: 12px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     text-decoration: none;
     text-align: left;
@@ -127,26 +167,6 @@
     border: 1px solid #e2e8f0;
     position: relative;
     overflow: hidden;
-    opacity: 0;
-    animation: slideIn 0.6s ease forwards;
-  }
-
-  .menu-item:nth-child(1) { animation-delay: 0.1s; }
-  .menu-item:nth-child(2) { animation-delay: 0.2s; }
-  .menu-item:nth-child(3) { animation-delay: 0.3s; }
-  .menu-item:nth-child(4) { animation-delay: 0.4s; }
-  .menu-item:nth-child(5) { animation-delay: 0.5s; }
-  .menu-item:nth-child(6) { animation-delay: 0.6s; }
-
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateX(-30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
   }
 
   .menu-item::before {
@@ -165,165 +185,153 @@
   }
 
   .menu-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
     border-color: #667eea;
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
   }
 
-  .menu-item:active {
-    transform: translateY(0);
-  }
-
   .icon {
     display: inline-block;
-    margin-right: 12px;
-    font-size: 18px;
-    width: 24px;
+    margin-right: 8px;
+    font-size: 16px;
+    width: 20px;
     text-align: center;
   }
 
-  .footer {
-    text-align: center;
-    margin-top: 32px;
-    padding-top: 24px;
-    border-top: 1px solid #e2e8f0;
-    color: #718096;
-    font-size: 14px;
-  }
-
+  /* 響應式設計 */
   @media (max-width: 480px) {
-    .container {
-      margin: 10px;
-      padding: 32px 24px;
+    .chat-container {
+      right: 20px;
+      left: 20px;
+      width: auto;
+      bottom: 90px;
     }
     
-    .greeting h1 {
-      font-size: 24px;
-    }
-    
-    .greeting p {
-      font-size: 15px;
-    }
-    
-    .menu-item {
-      padding: 16px 20px;
-      font-size: 15px;
+    .chat-button {
+      right: 20px;
+      bottom: 20px;
     }
   }
 
-  /* Smooth scrolling for mobile */
-  html {
-    scroll-behavior: smooth;
+  /* 對話氣泡箭頭 */
+  .chat-container::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    right: 25px;
+    width: 16px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.95);
+    transform: rotate(45deg);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    border-right: 1px solid rgba(0,0,0,0.1);
+  }
+
+  /* 滾動條樣式 */
+  .chat-content::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .chat-content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .chat-content::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.3);
+    border-radius: 2px;
+  }
+
+  .chat-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(102, 126, 234, 0.5);
   }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="avatar">👋</div>
-  
-  <div class="greeting">
-    <h1>Hello, I'm Sylvia</h1>
-    <p>An inquisitive data analyst with journalism and marketing experience. I transform data into actionable stories using modern tools to drive strategic business decisions.</p>
+<!-- 浮動聊天按鈕 -->
+<button class="chat-button" id="chatButton">
+  💬
+</button>
+
+<!-- 聊天窗口 -->
+<div class="chat-container" id="chatContainer">
+  <div class="chat-header">
+    <div class="avatar">👋</div>
+    <div class="greeting">
+      <h1>Hi, I'm Sylvia</h1>
+      <p>Data analyst passionate about turning insights into action</p>
+    </div>
   </div>
 
-  <div class="menu">
-    <a href="https://drive.google.com/file/d/15VpCqHvEA2TfO3oAuwIgDWm5hg3krUzS/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="menu-item">
-      <span class="icon">📋</span>
-      View My Resume
-    </a>
-    
-    <a href="https://sudden-birthday-124.notion.site/249278cb6ff1810f9335d3a0004f78ce?v=249278cb6ff1816da03a000c7a14ab39" target="_blank" rel="noopener noreferrer" class="menu-item">
-      <span class="icon">🎨</span>
-      Explore Portfolio
-    </a>
-    
-    <a href="https://sudden-birthday-124.notion.site/Vital-Health-Marketing-Insights-249278cb6ff1811bbf20ea60f8a546ac" target="_blank" rel="noopener noreferrer" class="menu-item">
-      <span class="icon">🚀</span>
-      Featured Projects
-    </a>
-    
-    <a href="https://sudden-birthday-124.notion.site/249278cb6ff181b4bf8dd83fbc0d2a88?v=249278cb6ff1819d9331000c224ac27e" target="_blank" rel="noopener noreferrer" class="menu-item">
-      <span class="icon">🛠️</span>
-      Skills & Tools
-    </a>
-    
-    <a href="https://www.linkedin.com/in/sylviayanwen/" target="_blank" rel="noopener noreferrer" class="menu-item">
-      <span class="icon">🔗</span>
-      Connect on LinkedIn
-    </a>
-    
-    <a href="mailto:yanztsail@gmail.com" target="_blank" rel="noopener noreferrer" class="menu-item">
-      <span class="icon">✉️</span>
-      Send Me an Email
-    </a>
-  </div>
-
-  <div class="footer">
-    <p>© 2024 Sylvia Tsai • Data Analyst</p>
+  <div class="chat-content">
+    <div class="menu">
+      <a href="https://drive.google.com/file/d/15VpCqHvEA2TfO3oAuwIgDWm5hg3krUzS/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="menu-item">
+        <span class="icon">📋</span>
+        View My Resume
+      </a>
+      
+      <a href="https://sudden-birthday-124.notion.site/249278cb6ff1810f9335d3a0004f78ce?v=249278cb6ff1816da03a000c7a14ab39" target="_blank" rel="noopener noreferrer" class="menu-item">
+        <span class="icon">🎨</span>
+        Explore Portfolio
+      </a>
+      
+      <a href="https://sudden-birthday-124.notion.site/Vital-Health-Marketing-Insights-249278cb6ff1811bbf20ea60f8a546ac" target="_blank" rel="noopener noreferrer" class="menu-item">
+        <span class="icon">🚀</span>
+        Featured Projects
+      </a>
+      
+      <a href="https://sudden-birthday-124.notion.site/249278cb6ff181b4bf8dd83fbc0d2a88?v=249278cb6ff1819d9331000c224ac27e" target="_blank" rel="noopener noreferrer" class="menu-item">
+        <span class="icon">🛠️</span>
+        Skills & Tools
+      </a>
+      
+      <a href="https://www.linkedin.com/in/sylviayanwen/" target="_blank" rel="noopener noreferrer" class="menu-item">
+        <span class="icon">🔗</span>
+        Connect on LinkedIn
+      </a>
+      
+      <a href="mailto:yanztsail@gmail.com" target="_blank" rel="noopener noreferrer" class="menu-item">
+        <span class="icon">✉️</span>
+        Send Me an Email
+      </a>
+    </div>
   </div>
 </div>
 
 <script>
-function goTo(url) {
-  // Add a subtle click feedback
-  const target = event.target;
-  target.style.transform = 'scale(0.98)';
-  
-  setTimeout(() => {
-    target.style.transform = '';
-    // Try multiple methods to open URL
-    try {
-      const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
-      if (!newWindow) {
-        // Fallback: direct navigation
-        window.location.href = url;
-      }
-    } catch (e) {
-      // Final fallback
-      window.location.href = url;
-    }
-  }, 150);
-}
+const chatButton = document.getElementById('chatButton');
+const chatContainer = document.getElementById('chatContainer');
 
-// Add some interactivity
-document.addEventListener('DOMContentLoaded', function() {
-  // Add cursor trail effect (subtle)
-  let trails = [];
+chatButton.addEventListener('click', function() {
+  const isOpen = chatContainer.classList.contains('show');
   
-  document.addEventListener('mousemove', function(e) {
-    if (trails.length > 5) {
-      trails.shift().remove();
-    }
-    
-    const trail = document.createElement('div');
-    trail.style.position = 'fixed';
-    trail.style.left = e.clientX + 'px';
-    trail.style.top = e.clientY + 'px';
-    trail.style.width = '4px';
-    trail.style.height = '4px';
-    trail.style.background = 'rgba(102, 126, 234, 0.3)';
-    trail.style.borderRadius = '50%';
-    trail.style.pointerEvents = 'none';
-    trail.style.zIndex = '9999';
-    trail.style.transition = 'all 0.5s ease-out';
-    
-    document.body.appendChild(trail);
-    trails.push(trail);
-    
-    setTimeout(() => {
-      trail.style.transform = 'scale(0)';
-      trail.style.opacity = '0';
-    }, 100);
-    
-    setTimeout(() => {
-      if (trail.parentNode) {
-        trail.remove();
-      }
-    }, 600);
-  });
+  if (isOpen) {
+    // 關閉聊天窗口
+    chatContainer.classList.remove('show');
+    chatButton.classList.remove('active');
+    chatButton.innerHTML = '💬';
+  } else {
+    // 開啟聊天窗口
+    chatContainer.classList.add('show');
+    chatButton.classList.add('active');
+    chatButton.innerHTML = '✕';
+  }
+});
+
+// 點擊外部關閉聊天窗口
+document.addEventListener('click', function(event) {
+  if (!chatContainer.contains(event.target) && !chatButton.contains(event.target)) {
+    chatContainer.classList.remove('show');
+    chatButton.classList.remove('active');
+    chatButton.innerHTML = '💬';
+  }
+});
+
+// 防止聊天窗口內的點擊關閉窗口
+chatContainer.addEventListener('click', function(event) {
+  event.stopPropagation();
 });
 </script>
 
