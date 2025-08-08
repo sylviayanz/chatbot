@@ -14,287 +14,284 @@
   body {
     font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: transparent;
-    margin: 0;
-    padding: 0;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 20px;
+    overflow: visible;
   }
 
-  /* 浮動聊天按鈕 */
+  /* 初始狀態：只顯示小按鈕 */
+  .chat-widget {
+    position: relative;
+    z-index: 1000;
+  }
+
   .chat-button {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
     width: 60px;
     height: 60px;
     border-radius: 50%;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
+    font-size: 26px;
     color: white;
     border: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1000;
-    animation: pulse 2s infinite;
+    animation: gentle-pulse 3s infinite;
+    position: relative;
   }
 
   .chat-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+    transform: scale(1.05);
+    box-shadow: 0 6px 30px rgba(102, 126, 234, 0.5);
   }
 
   .chat-button.active {
-    transform: rotate(45deg);
+    transform: rotate(45deg) scale(1.05);
     background: linear-gradient(135deg, #f56565, #e53e3e);
   }
 
-  @keyframes pulse {
-    0% { box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3); }
-    50% { box-shadow: 0 8px 32px rgba(102, 126, 234, 0.6); }
-    100% { box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3); }
+  @keyframes gentle-pulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4); }
+    50% { box-shadow: 0 4px 20px rgba(102, 126, 234, 0.6), 0 0 0 8px rgba(102, 126, 234, 0.1); }
   }
 
-  /* 聊天窗口 */
-  .chat-container {
-    position: fixed;
-    bottom: 100px;
-    right: 30px;
-    width: 380px;
-    max-height: 500px;
-    background: rgba(255, 255, 255, 0.95);
+  /* 通知小點 */
+  .notification-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 18px;
+    height: 18px;
+    background: #ff4757;
+    border-radius: 50%;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: bounce 2s infinite;
+    border: 2px solid white;
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-4px); }
+    60% { transform: translateY(-2px); }
+  }
+
+  /* 展開的聊天面板 */
+  .chat-panel {
+    position: absolute;
+    bottom: 75px;
+    right: 0;
+    width: 320px;
+    background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(15px);
-    border-radius: 20px;
+    border-radius: 16px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 8px 32px rgba(0,0,0,0.1);
-    transform: translateY(20px) scale(0.95);
+    transform: translateY(10px) scale(0.95);
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 999;
     overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.2);
   }
 
-  .chat-container.show {
+  .chat-panel.show {
     transform: translateY(0) scale(1);
     opacity: 1;
     visibility: visible;
   }
 
-  .chat-container::before {
+  /* 彩色頂部邊框 */
+  .chat-panel::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c);
-    background-size: 300% 100%;
-    animation: gradient 3s ease infinite;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+    background-size: 200% 100%;
+    animation: flow 3s linear infinite;
   }
 
-  @keyframes gradient {
+  @keyframes flow {
     0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  /* 對話氣泡尾巴 */
+  .chat-panel::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    right: 25px;
+    width: 12px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.98);
+    transform: rotate(45deg);
+    border: 1px solid rgba(0,0,0,0.05);
   }
 
   .chat-header {
-    padding: 20px 24px 16px;
+    padding: 18px 20px 12px;
     text-align: center;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
   }
 
-  .avatar {
-    width: 50px;
-    height: 50px;
+  .avatar-small {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: linear-gradient(135deg, #667eea, #764ba2);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 12px;
-    font-size: 24px;
-    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
-  }
-
-  .greeting {
-    margin-bottom: 0;
-  }
-
-  .greeting h1 {
+    margin: 0 auto 10px;
     font-size: 20px;
-    font-weight: 700;
+    box-shadow: 0 2px 12px rgba(102, 126, 234, 0.3);
+  }
+
+  .greeting-small h2 {
+    font-size: 16px;
+    font-weight: 600;
     color: #2d3748;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     background: linear-gradient(135deg, #667eea, #764ba2);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .greeting p {
-    font-size: 13px;
-    color: #4a5568;
-    line-height: 1.4;
+  .greeting-small p {
+    font-size: 12px;
+    color: #718096;
+    line-height: 1.3;
   }
 
-  .chat-content {
-    padding: 20px 24px 24px;
-    max-height: 320px;
-    overflow-y: auto;
-  }
-
-  .menu {
+  .menu-compact {
+    padding: 0 16px 16px;
     display: grid;
-    gap: 8px;
+    gap: 6px;
   }
 
-  .menu-item {
-    display: block;
-    width: 100%;
-    padding: 12px 16px;
-    border: none;
-    background: #ffffff;
+  .menu-item-compact {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    background: white;
     color: #2d3748;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
+    border-radius: 10px;
     text-decoration: none;
-    text-align: left;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid #e2e8f0;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 1px solid #f1f5f9;
     position: relative;
     overflow: hidden;
   }
 
-  .menu-item::before {
+  .menu-item-compact::before {
     content: '';
     position: absolute;
     top: 0;
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
-    transition: left 0.6s;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.08), transparent);
+    transition: left 0.4s;
   }
 
-  .menu-item:hover::before {
+  .menu-item-compact:hover::before {
     left: 100%;
   }
 
-  .menu-item:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
-    border-color: #667eea;
+  .menu-item-compact:hover {
+    transform: translateX(3px);
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    border-color: transparent;
   }
 
-  .icon {
-    display: inline-block;
+  .icon-compact {
     margin-right: 8px;
-    font-size: 16px;
-    width: 20px;
+    font-size: 14px;
+    width: 18px;
     text-align: center;
   }
 
-  /* 響應式設計 */
-  @media (max-width: 480px) {
-    .chat-container {
-      right: 20px;
-      left: 20px;
-      width: auto;
-      bottom: 90px;
-    }
-    
-    .chat-button {
-      right: 20px;
-      bottom: 20px;
+  /* 響應式 */
+  @media (max-width: 400px) {
+    .chat-panel {
+      width: 280px;
+      right: -30px;
     }
   }
 
-  /* 對話氣泡箭頭 */
-  .chat-container::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    right: 25px;
-    width: 16px;
-    height: 16px;
-    background: rgba(255, 255, 255, 0.95);
-    transform: rotate(45deg);
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    border-right: 1px solid rgba(0,0,0,0.1);
-  }
-
-  /* 滾動條樣式 */
-  .chat-content::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  .chat-content::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .chat-content::-webkit-scrollbar-thumb {
-    background: rgba(102, 126, 234, 0.3);
-    border-radius: 2px;
-  }
-
-  .chat-content::-webkit-scrollbar-thumb:hover {
-    background: rgba(102, 126, 234, 0.5);
+  /* Notion iframe 適配 */
+  html {
+    height: 80px;
+    overflow: visible;
   }
 </style>
 </head>
 <body>
 
-<!-- 浮動聊天按鈕 -->
-<button class="chat-button" id="chatButton">
-  💬
-</button>
+<div class="chat-widget">
+  <!-- 浮動按鈕 -->
+  <button class="chat-button" id="chatButton">
+    <span id="buttonIcon">💬</span>
+    <div class="notification-dot">!</div>
+  </button>
 
-<!-- 聊天窗口 -->
-<div class="chat-container" id="chatContainer">
-  <div class="chat-header">
-    <div class="avatar">👋</div>
-    <div class="greeting">
-      <h1>Hi, I'm Sylvia</h1>
-      <p>Data analyst passionate about turning insights into action</p>
+  <!-- 彈出面板 -->
+  <div class="chat-panel" id="chatPanel">
+    <div class="chat-header">
+      <div class="avatar-small">👋</div>
+      <div class="greeting-small">
+        <h2>Hi, I'm Sylvia!</h2>
+        <p>Data Analyst • Let's connect!</p>
+      </div>
     </div>
-  </div>
 
-  <div class="chat-content">
-    <div class="menu">
-      <a href="https://drive.google.com/file/d/15VpCqHvEA2TfO3oAuwIgDWm5hg3krUzS/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="menu-item">
-        <span class="icon">📋</span>
-        View My Resume
+    <div class="menu-compact">
+      <a href="https://drive.google.com/file/d/15VpCqHvEA2TfO3oAuwIgDWm5hg3krUzS/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="menu-item-compact">
+        <span class="icon-compact">📋</span>
+        View Resume
       </a>
       
-      <a href="https://sudden-birthday-124.notion.site/249278cb6ff1810f9335d3a0004f78ce?v=249278cb6ff1816da03a000c7a14ab39" target="_blank" rel="noopener noreferrer" class="menu-item">
-        <span class="icon">🎨</span>
-        Explore Portfolio
+      <a href="https://sudden-birthday-124.notion.site/249278cb6ff1810f9335d3a0004f78ce?v=249278cb6ff1816da03a000c7a14ab39" target="_blank" rel="noopener noreferrer" class="menu-item-compact">
+        <span class="icon-compact">🎨</span>
+        Portfolio
       </a>
       
-      <a href="https://sudden-birthday-124.notion.site/Vital-Health-Marketing-Insights-249278cb6ff1811bbf20ea60f8a546ac" target="_blank" rel="noopener noreferrer" class="menu-item">
-        <span class="icon">🚀</span>
+      <a href="https://sudden-birthday-124.notion.site/Vital-Health-Marketing-Insights-249278cb6ff1811bbf20ea60f8a546ac" target="_blank" rel="noopener noreferrer" class="menu-item-compact">
+        <span class="icon-compact">🚀</span>
         Featured Projects
       </a>
       
-      <a href="https://sudden-birthday-124.notion.site/249278cb6ff181b4bf8dd83fbc0d2a88?v=249278cb6ff1819d9331000c224ac27e" target="_blank" rel="noopener noreferrer" class="menu-item">
-        <span class="icon">🛠️</span>
+      <a href="https://sudden-birthday-124.notion.site/249278cb6ff181b4bf8dd83fbc0d2a88?v=249278cb6ff1819d9331000c224ac27e" target="_blank" rel="noopener noreferrer" class="menu-item-compact">
+        <span class="icon-compact">🛠️</span>
         Skills & Tools
       </a>
       
-      <a href="https://www.linkedin.com/in/sylviayanwen/" target="_blank" rel="noopener noreferrer" class="menu-item">
-        <span class="icon">🔗</span>
-        Connect on LinkedIn
+      <a href="https://www.linkedin.com/in/sylviayanwen/" target="_blank" rel="noopener noreferrer" class="menu-item-compact">
+        <span class="icon-compact">🔗</span>
+        LinkedIn
       </a>
       
-      <a href="mailto:yanztsail@gmail.com" target="_blank" rel="noopener noreferrer" class="menu-item">
-        <span class="icon">✉️</span>
-        Send Me an Email
+      <a href="mailto:yanztsail@gmail.com" target="_blank" rel="noopener noreferrer" class="menu-item-compact">
+        <span class="icon-compact">✉️</span>
+        Email Me
       </a>
     </div>
   </div>
@@ -302,37 +299,60 @@
 
 <script>
 const chatButton = document.getElementById('chatButton');
-const chatContainer = document.getElementById('chatContainer');
+const chatPanel = document.getElementById('chatPanel');
+const buttonIcon = document.getElementById('buttonIcon');
 
-chatButton.addEventListener('click', function() {
-  const isOpen = chatContainer.classList.contains('show');
+// 切換聊天面板
+chatButton.addEventListener('click', function(e) {
+  e.stopPropagation();
+  
+  const isOpen = chatPanel.classList.contains('show');
   
   if (isOpen) {
-    // 關閉聊天窗口
-    chatContainer.classList.remove('show');
+    // 關閉
+    chatPanel.classList.remove('show');
     chatButton.classList.remove('active');
-    chatButton.innerHTML = '💬';
+    buttonIcon.textContent = '💬';
+    // 恢復通知點
+    setTimeout(() => {
+      const dot = chatButton.querySelector('.notification-dot');
+      if (dot) dot.style.display = 'flex';
+    }, 300);
   } else {
-    // 開啟聊天窗口
-    chatContainer.classList.add('show');
+    // 開啟
+    chatPanel.classList.add('show');
     chatButton.classList.add('active');
-    chatButton.innerHTML = '✕';
+    buttonIcon.textContent = '✕';
+    // 隱藏通知點
+    const dot = chatButton.querySelector('.notification-dot');
+    if (dot) dot.style.display = 'none';
   }
 });
 
-// 點擊外部關閉聊天窗口
+// 點擊外部關閉
 document.addEventListener('click', function(event) {
-  if (!chatContainer.contains(event.target) && !chatButton.contains(event.target)) {
-    chatContainer.classList.remove('show');
+  if (!chatButton.contains(event.target) && !chatPanel.contains(event.target)) {
+    chatPanel.classList.remove('show');
     chatButton.classList.remove('active');
-    chatButton.innerHTML = '💬';
+    buttonIcon.textContent = '💬';
+    // 恢復通知點
+    const dot = chatButton.querySelector('.notification-dot');
+    if (dot) dot.style.display = 'flex';
   }
 });
 
-// 防止聊天窗口內的點擊關閉窗口
-chatContainer.addEventListener('click', function(event) {
-  event.stopPropagation();
+// 防止面板內點擊冒泡
+chatPanel.addEventListener('click', function(e) {
+  e.stopPropagation();
 });
+
+// 自動隱藏通知點（5秒後）
+setTimeout(() => {
+  const dot = chatButton.querySelector('.notification-dot');
+  if (dot && !chatPanel.classList.contains('show')) {
+    dot.style.animation = 'fadeOut 0.5s ease forwards';
+  }
+}, 5000);
 </script>
 
 </body>
