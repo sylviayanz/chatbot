@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sylvia's Digital Portfolio</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    max-width: 450px;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 8px 32px rgba(0,0,0,0.1);
+    padding: 40px 35px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c);
+    background-size: 300% 100%;
+    animation: gradient 3s ease infinite;
+  }
+
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 36px;
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .greeting {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .greeting h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .greeting p {
+    font-size: 16px;
+    color: #4a5568;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards 0.3s;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .menu {
+    display: grid;
+    gap: 12px;
+  }
+
+  .menu-item {
+    display: block;
+    width: 100%;
+    padding: 18px 24px;
+    border: none;
+    background: #ffffff;
+    color: #2d3748;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: left;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #e2e8f0;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: slideIn 0.6s ease forwards;
+  }
+
+  .menu-item:nth-child(1) { animation-delay: 0.1s; }
+  .menu-item:nth-child(2) { animation-delay: 0.2s; }
+  .menu-item:nth-child(3) { animation-delay: 0.3s; }
+  .menu-item:nth-child(4) { animation-delay: 0.4s; }
+  .menu-item:nth-child(5) { animation-delay: 0.5s; }
+  .menu-item:nth-child(6) { animation-delay: 0.6s; }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .menu-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+    transition: left 0.6s;
+  }
+
+  .menu-item:hover::before {
+    left: 100%;
+  }
+
+  .menu-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.15);
+    border-color: #667eea;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+  }
+
+  .menu-item:active {
+    transform: translateY(0);
+  }
+
+  .icon {
+    display: inline-block;
+    margin-right: 12px;
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+    color: #718096;
+    font-size: 14px;
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      margin: 10px;
+      padding: 32px 24px;
+    }
+    
+    .greeting h1 {
+      font-size: 24px;
+    }
+    
+    .greeting p {
+      font-size: 15px;
+    }
+    
+    .menu-item {
+      padding: 16px 20px;
+      font-size: 15px;
+    }
+  }
+
+  /* Smooth scrolling for mobile */
+  html {
+    scroll-behavior: smooth;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="avatar">👋</div>
+  
+  <div class="greeting">
+    <h1>Hello, I'm Sylvia</h1>
+    <p>An inquisitive data analyst with journalism and marketing experience. I transform data into actionable stories using modern tools to drive strategic business decisions.</p>
+  </div>
+
+  <div class="menu">
+    <button class="menu-item" onclick="goTo('https://drive.google.com/file/d/15VpCqHvEA2TfO3oAuwIgDWm5hg3krUzS/view?usp=sharing')">
+      <span class="icon">📋</span>
+      View My Resume
+    </button>
+    
+    <button class="menu-item" onclick="goTo('https://sudden-birthday-124.notion.site/249278cb6ff1810f9335d3a0004f78ce?v=249278cb6ff1816da03a000c7a14ab39')">
+      <span class="icon">🎨</span>
+      Explore Portfolio
+    </button>
+    
+    <button class="menu-item" onclick="goTo('https://sudden-birthday-124.notion.site/Vital-Health-Marketing-Insights-249278cb6ff1811bbf20ea60f8a546ac')">
+      <span class="icon">🚀</span>
+      Featured Projects
+    </button>
+    
+    <button class="menu-item" onclick="goTo('https://sudden-birthday-124.notion.site/249278cb6ff181b4bf8dd83fbc0d2a88?v=249278cb6ff1819d9331000c224ac27e')">
+      <span class="icon">🛠️</span>
+      Skills & Tools
+    </button>
+    
+    <button class="menu-item" onclick="goTo('https://www.linkedin.com/in/sylviayanwen/')">
+      <span class="icon">🔗</span>
+      Connect on LinkedIn
+    </button>
+    
+    <button class="menu-item" onclick="goTo('mailto:yanztsail@gmail.com')">
+      <span class="icon">✉️</span>
+      Send Me an Email
+    </button>
+  </div>
+
+  <div class="footer">
+    <p>© 2024 Sylvia Tsai • Data Analyst</p>
+  </div>
+</div>
+
+<script>
+function goTo(url) {
+  // Add a subtle click feedback
+  event.target.style.transform = 'scale(0.98)';
+  setTimeout(() => {
+    event.target.style.transform = '';
+    window.open(url, '_blank');
+  }, 150);
+}
+
+// Add some interactivity
+document.addEventListener('DOMContentLoaded', function() {
+  // Add cursor trail effect (subtle)
+  let trails = [];
+  
+  document.addEventListener('mousemove', function(e) {
+    if (trails.length > 5) {
+      trails.shift().remove();
+    }
+    
+    const trail = document.createElement('div');
+    trail.style.position = 'fixed';
+    trail.style.left = e.clientX + 'px';
+    trail.style.top = e.clientY + 'px';
+    trail.style.width = '4px';
+    trail.style.height = '4px';
+    trail.style.background = 'rgba(102, 126, 234, 0.3)';
+    trail.style.borderRadius = '50%';
+    trail.style.pointerEvents = 'none';
+    trail.style.zIndex = '9999';
+    trail.style.transition = 'all 0.5s ease-out';
+    
+    document.body.appendChild(trail);
+    trails.push(trail);
+    
+    setTimeout(() => {
+      trail.style.transform = 'scale(0)';
+      trail.style.opacity = '0';
+    }, 100);
+    
+    setTimeout(() => {
+      if (trail.parentNode) {
+        trail.remove();
+      }
+    }, 600);
+  });
+});
+</script>
+
+</body>
+</html>
