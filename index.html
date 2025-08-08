@@ -269,10 +269,22 @@
 <script>
 function goTo(url) {
   // Add a subtle click feedback
-  event.target.style.transform = 'scale(0.98)';
+  const target = event.target;
+  target.style.transform = 'scale(0.98)';
+  
   setTimeout(() => {
-    event.target.style.transform = '';
-    window.open(url, '_blank');
+    target.style.transform = '';
+    // Try multiple methods to open URL
+    try {
+      const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+      if (!newWindow) {
+        // Fallback: direct navigation
+        window.location.href = url;
+      }
+    } catch (e) {
+      // Final fallback
+      window.location.href = url;
+    }
   }, 150);
 }
 
