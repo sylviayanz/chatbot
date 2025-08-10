@@ -340,8 +340,35 @@
     </div>
 
     <div class="menu-compact" id="menuContainer">
-      <!-- Content will be loaded here -->
-      <div class="loading">Loading menu...</div>
+      <a href="https://drive.google.com/file/d/15VpCqHvEA2TfO3oAuwIgDWm5hg3krUzS/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="menu-item-compact">
+        <span class="icon-compact">📋</span>
+        View Resume
+      </a>
+      
+      <a href="https://sudden-birthday-124.notion.site/249278cb6ff1810f9335d3a0004f78ce?v=249278cb6ff1816da03a000c7a14ab39" target="_blank" rel="noopener noreferrer" class="menu-item-compact">
+        <span class="icon-compact">🎨</span>
+        Portfolio
+      </a>
+      
+      <a href="https://sudden-birthday-124.notion.site/Vital-Health-Marketing-Insights-249278cb6ff1811bbf20ea60f8a546ac" target="_blank" rel="noopener noreferrer" class="menu-item-compact">
+        <span class="icon-compact">🚀</span>
+        Featured Projects
+      </a>
+      
+      <a href="https://sudden-birthday-124.notion.site/249278cb6ff181b4bf8dd83fbc0d2a88?v=249278cb6ff1819d9331000c224ac27e" target="_blank" rel="noopener noreferrer" class="menu-item-compact">
+        <span class="icon-compact">🛠️</span>
+        Skills & Tools
+      </a>
+      
+      <a href="https://www.linkedin.com/in/sylviayanwen/" target="_blank" rel="noopener noreferrer" class="menu-item-compact">
+        <span class="icon-compact">🔗</span>
+        LinkedIn
+      </a>
+      
+      <a href="mailto:yanztsail@gmail.com" target="_blank" rel="noopener noreferrer" class="menu-item-compact">
+        <span class="icon-compact">✉️</span>
+        Email Me
+      </a>
     </div>
   </div>
 
@@ -366,48 +393,11 @@ const chatPanel = document.getElementById('chatPanel');
 const buttonIcon = document.getElementById('buttonIcon');
 const menuContainer = document.getElementById('menuContainer');
 
-// Menu items data
-const menuItems = [
-  {
-    icon: '📋',
-    text: 'View Resume',
-    url: 'https://drive.google.com/file/d/15VpCqHvEA2TfO3oAuwIgDWm5hg3krUzS/view?usp=sharing'
-  },
-  {
-    icon: '🎨',
-    text: 'Portfolio',
-    url: 'https://sudden-birthday-124.notion.site/249278cb6ff1810f9335d3a0004f78ce?v=249278cb6ff1816da03a000c7a14ab39'
-  },
-  {
-    icon: '🚀',
-    text: 'Featured Projects',
-    url: 'https://sudden-birthday-124.notion.site/Vital-Health-Marketing-Insights-249278cb6ff1811bbf20ea60f8a546ac'
-  },
-  {
-    icon: '🛠️',
-    text: 'Skills & Tools',
-    url: 'https://sudden-birthday-124.notion.site/249278cb6ff181b4bf8dd83fbc0d2a88?v=249278cb6ff1819d9331000c224ac27e'
-  },
-  {
-    icon: '🔗',
-    text: 'LinkedIn',
-    url: 'https://www.linkedin.com/in/sylviayanwen/'
-  },
-  {
-    icon: '✉️',
-    text: 'Email Me',
-    url: 'mailto:yanztsail@gmail.com'
-  }
-];
-
 // Initialize the widget
 function init() {
   debug('Widget initializing...');
   
   try {
-    // Load menu items
-    loadMenuItems();
-    
     // Set up event listeners
     setupEventListeners();
     
@@ -419,25 +409,6 @@ function init() {
   } catch (error) {
     debug(`Initialization error: ${error.message}`);
   }
-}
-
-// Load menu items
-function loadMenuItems() {
-  debug('Loading menu items...');
-  
-  const menuHTML = menuItems.map(item => `
-    <a href="${item.url}" 
-       target="_blank" 
-       rel="noopener noreferrer" 
-       class="menu-item-compact"
-       onclick="trackClick('${item.text}')">
-      <span class="icon-compact">${item.icon}</span>
-      ${item.text}
-    </a>
-  `).join('');
-  
-  menuContainer.innerHTML = menuHTML;
-  debug('Menu items loaded');
 }
 
 // Set up event listeners
